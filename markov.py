@@ -11,8 +11,9 @@ def open_and_read_file(file_path):
     """
 
     # your code goes here
-
-    return "Contents of your file as one long string"
+    with open(file_path) as file:
+        file_string = file.read().rstrip()
+    return file_string
 
 
 def make_chains(text_string):
@@ -39,8 +40,22 @@ def make_chains(text_string):
         >>> chains[('there','juanita')]
         [None]
     """
-
+    words = text_string.split()
     chains = {}
+
+    for i in range(len(words) - 1):
+
+        bigram = (words[i], words[i + 1])
+        if i + 3 > len(words):
+            return chains
+        if bigram not in chains:
+            following_words = []
+            following_words.append(words[i + 2])
+            chains[bigram] = following_words
+        else:
+            following_words = chains.get(bigram)
+            following_words.append(words[i+2])
+            chains[bigram] = following_words
 
     # your code goes here
 
@@ -61,11 +76,11 @@ input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
-
-# Get a Markov chain
+# # Get a Markov chain
 chains = make_chains(input_text)
+print(chains)
 
-# Produce random text
-random_text = make_text(chains)
+# # Produce random text
+# random_text = make_text(chains)
 
-print(random_text)
+# print(random_text)
