@@ -2,6 +2,10 @@
 
 from random import choice
 
+def place_to_end(text_string):
+    words = text_string.split()
+    return (words[-3], words[-2])
+
 
 def open_and_read_file(file_path):
     """Take file path as string; return text as string.
@@ -49,13 +53,10 @@ def make_chains(text_string):
         if i + 3 > len(words):
             return chains
         if bigram not in chains:
-            following_words = []
-            following_words.append(words[i + 2])
-            chains[bigram] = following_words
+            chains[bigram] = []
+            chains[bigram].append(words[i+2])
         else:
-            following_words = chains.get(bigram)
-            following_words.append(words[i+2])
-            chains[bigram] = following_words
+            chains[bigram].append(words[i+2])
 
     # your code goes here
 
@@ -68,6 +69,20 @@ def make_text(chains):
     words = []
 
     # your code goes here
+    bigram = choice(list(chains))
+    word1, word2 = bigram[0], bigram[1]
+    word3 = choice(chains[bigram])
+
+    words.append(word1)
+    words.append(word2)
+    words.append(word3)
+
+    while bigram != (place_to_end(input_text)):
+        bigram = (word2, word3)
+        new_word = choice(chains[bigram])
+        words.append(new_word)
+        word2 = word3
+        word3 = new_word
 
     return " ".join(words)
 
@@ -78,7 +93,7 @@ input_path = "green-eggs.txt"
 input_text = open_and_read_file(input_path)
 # # Get a Markov chain
 chains = make_chains(input_text)
-print(chains)
+print(make_text(chains))
 
 # # Produce random text
 # random_text = make_text(chains)
