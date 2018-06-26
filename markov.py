@@ -1,23 +1,27 @@
 """Generate Markov text from text files."""
 
 from random import choice
+import sys
+
 
 def place_to_end(text_string):
     words = text_string.split()
     return (words[-3], words[-2])
 
 
-def open_and_read_file(file_path):
+def open_and_read_file(file_paths):
     """Take file path as string; return text as string.
 
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
-
+    new_string = ""
     # your code goes here
-    with open(file_path) as file:
-        file_string = file.read().rstrip()
-    return file_string
+    for file_path in file_paths:
+        with open(file_path) as file:
+            new_string += file.read().rstrip()
+    
+    return new_string
 
 
 def make_chains(text_string):
@@ -87,15 +91,14 @@ def make_text(chains):
     return " ".join(words)
 
 
-input_path = "green-eggs.txt"
+input_path = sys.argv[1:]
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
+
 # # Get a Markov chain
 chains = make_chains(input_text)
-print(make_text(chains))
 
 # # Produce random text
-# random_text = make_text(chains)
-
-# print(random_text)
+random_text = make_text(chains)
+print(random_text)
